@@ -38,6 +38,9 @@ Example Custom State for your robot (overriding the default state object)
 class MyRobotState : public RobotState {
   public:
     long my_variable = 0;
+    int lSpeech = -180;
+    int rSpeech = -180;
+    int forwardSpeed = -180;
     
     MyRobotState() : RobotState() { }
 };
@@ -141,6 +144,7 @@ void drivingActions() {
   int ir2 = state->ir2;
   int ir3 = state->ir3;
   int ir4 = state->ir4;
+  int delayTime = 500;
 
   int ir1_threshold = state->ir1_soft_threshold;
   int ir2_threshold = state->ir2_soft_threshold;
@@ -148,35 +152,33 @@ void drivingActions() {
   int ir4_threshold = state->ir4_soft_threshold;
 
   LOGGER.println("ir1" + String(ir1) + "ir2" + String(ir2) + "ir3" + String(ir3) + "ir4" +String(ir4));
-  
-  if (ir2 >= ir1_threshold && ir3 >= ir3_threshold) {
+
+  if (ir2 >= ir2_threshold && ir3 >= ir3_threshold) {
       LOGGER.println("forward");
       board->setSpeedOnBothMotors(-160);
   } else if (ir2 < ir2_threshold && ir3 >= ir3_threshold) {
       // adjust to the right
-      board->setMotorSpeedR(-135); // left=
-      board->setMotorSpeedL(-100); // right
-      delay(500);
-  } else if (ir4 >= ir4_threshold && ir3 >= ir3_threshold && ir1 < ir1_threshold) {
-      // sharp right turn
-      board->setMotorSpeedR(-155);
-      board->setMotorSpeedL(-90);
-      delay(500);
+      board->setMotorSpeedR(-165); // left=
+      board->setMotorSpeedL(-120); // right
+  // } else if (ir4 >= ir4_threshold && ir3 >= ir3_threshold && ir1 < ir1_threshold) {
+  //     // sharp right turn
+  //     board->setMotorSpeedR(-185);
+  //     board->setMotorSpeedL(-110);
   } else if (ir2 >= ir2_threshold && ir3 < ir3_threshold) {
       // Car is veering to the right, adjust to the left
-      board->setMotorSpeedR(-100);
-      board->setMotorSpeedL(-135);
-      delay(500);
-  } else if (ir1 >= ir1_threshold && ir2 >= ir2_threshold && ir4 < ir4_threshold) {
-      // sharp left turn 
-      board->setMotorSpeedR(-90);
-      board->setMotorSpeedL(-155);
-      delay(500);
+      board->setMotorSpeedR(-120);
+      board->setMotorSpeedL(-165);
+  // } else if (ir1 >= ir1_threshold && ir2 >= ir2_threshold && ir4 < ir4_threshold) {
+  //     // sharp left turn 
+  //     board->setMotorSpeedR(-110);
+  //     board->setMotorSpeedL(-185);
   } else {
       // Car is off the track, stop or take corrective action
-      board->setSpeedOnBothMotors(100);
-      delay(500);
+      board->setSpeedOnBothMotors(160);
+      board->setSpeedOnBothMotors(-160);
   }
+
+
 }
 
 /**

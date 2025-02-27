@@ -34,10 +34,10 @@ RobotState::RobotState() {
     this->ir2_hard_threshold = 1200;
     this->ir3_hard_threshold = 1200;
     this->ir4_hard_threshold = 1200;
-    this->ir1_soft_threshold = 10;
-    this->ir2_soft_threshold = 10;
-    this->ir3_soft_threshold = 10;
-    this->ir4_soft_threshold = 10;
+    this->ir1_soft_threshold = 50;
+    this->ir2_soft_threshold = 50;
+    this->ir3_soft_threshold = 50;
+    this->ir4_soft_threshold = 50;
     this->ir1_raw = 0;
     this->ir2_raw = 0;
     this->ir3_raw = 0;
