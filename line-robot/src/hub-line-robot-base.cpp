@@ -34,10 +34,10 @@ RobotState::RobotState() {
     this->ir2_hard_threshold = 1200;
     this->ir3_hard_threshold = 1200;
     this->ir4_hard_threshold = 1200;
-    this->ir1_soft_threshold = 600;
-    this->ir2_soft_threshold = 600;
-    this->ir3_soft_threshold = 600;
-    this->ir4_soft_threshold = 600;
+    this->ir1_soft_threshold = 10;
+    this->ir2_soft_threshold = 10;
+    this->ir3_soft_threshold = 10;
+    this->ir4_soft_threshold = 10;
     this->ir1_raw = 0;
     this->ir2_raw = 0;
     this->ir3_raw = 0;
@@ -439,14 +439,14 @@ void RobotBoard::readIRValues() {
   this->state->ir4 = ir4Val;
 
   // Display the IR Values
-  if (this->state->isIdle()) {
+  // if (this->state->isIdle()) {
     String ir1 = padLeft(String(ir1Val), 4, ' ');
     String ir2 = padLeft(String(ir2Val), 4, ' ');
     String ir3 = padLeft(String(ir3Val), 4, ' ');
     String ir4 = padLeft(String(ir4Val), 4, ' ');
     String irVals = "IR: " + ir1 + " " + ir2 + " " + ir3 + " " + ir4;
     this->setOLEDLine(1, irVals, false);
-  }
+  // }
 }
 
 void RobotBoard::startBaselining() {

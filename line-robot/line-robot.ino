@@ -136,50 +136,48 @@ void drivingActions() {
     state->setIdle();
     return;
   }
-  
-  // This example will drive forward for 2s, pause for half a second, then drive backward for 2s
-  // board->setSpeedOnBothMotors(250);
-  // delay(2000);
-  // board->setSpeedOnBothMotors(0);
-  // delay(500);
-  // board->setSpeedOnBothMotors(-250);
-  // delay(2000);
-  // board->getRobotState()->setIdle();  
-  // read the state of ire
 
   int ir1 = state->ir1;
   int ir2 = state->ir2;
   int ir3 = state->ir3;
   int ir4 = state->ir4;
 
+  int ir1_threshold = state->ir1_soft_threshold;
+  int ir2_threshold = state->ir2_soft_threshold;
+  int ir3_threshold = state->ir3_soft_threshold;
+  int ir4_threshold = state->ir4_soft_threshold;
+
   LOGGER.println("ir1" + String(ir1) + "ir2" + String(ir2) + "ir3" + String(ir3) + "ir4" +String(ir4));
   
-  if (ir2 >= 600 && ir3 >= 600) {
-    LOGGER.println("forward");
-    board->setOLEDLine(7, "Forward");
-        // Car is on the track, move forward
-    board->setSpeedOnBothMotors(-200);
-  } else if (ir2 < 600 && ir3 >= 600) {
-      // Car is veering to the left, adjust to the right
-      LOGGER.println("adjust right");
-      board->setOLEDLine(7, "adjust right" );
-      board->setMotorSpeedL(-220);
-      board->setMotorSpeedR(-190);
-  } else if (ir2 >= 600 && ir3 < 600) {
+  if (ir2 >= ir1_threshold && ir3 >= ir3_threshold) {
+      LOGGER.println("forward");
+      board->setSpeedOnBothMotors(-160);
+  } else if (ir2 < ir2_threshold && ir3 >= ir3_threshold) {
+      // adjust to the right
+      board->setMotorSpeedR(-135); // left=
+      board->setMotorSpeedL(-100); // right
+      delay(500);
+  } else if (ir4 >= ir4_threshold && ir3 >= ir3_threshold && ir1 < ir1_threshold) {
+      // sharp right turn
+      board->setMotorSpeedR(-155);
+      board->setMotorSpeedL(-90);
+      delay(500);
+  } else if (ir2 >= ir2_threshold && ir3 < ir3_threshold) {
       // Car is veering to the right, adjust to the left
-       LOGGER.println("adjust left");
-       board->setOLEDLine(7, "adjust left");
-      board->setMotorSpeedL(-190);
-      board->setMotorSpeedR(-220);
+      board->setMotorSpeedR(-100);
+      board->setMotorSpeedL(-135);
+      delay(500);
+  } else if (ir1 >= ir1_threshold && ir2 >= ir2_threshold && ir4 < ir4_threshold) {
+      // sharp left turn 
+      board->setMotorSpeedR(-90);
+      board->setMotorSpeedL(-155);
+      delay(500);
   } else {
       // Car is off the track, stop or take corrective action
-      LOGGER.println("STOP");
-      board->setOLEDLine(7, "stop");
-      board->setSpeedOnBothMotors(0);
+      board->setSpeedOnBothMotors(100);
+      delay(500);
   }
-
 }
-
 
 /**
  * This is the setup function that will be called once when the board is powered on (or after a reset)
