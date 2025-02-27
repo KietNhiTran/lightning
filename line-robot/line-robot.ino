@@ -147,30 +147,34 @@ void drivingActions() {
   // board->getRobotState()->setIdle();  
   // read the state of ire
 
-  int ir1 = state->ir1 < state->ir1_soft_threshold;
-  int ir2 = state->ir2 < state->ir2_soft_threshold;
-  int ir3 = state->ir3 < state->ir3_soft_threshold;
-  int ir4 = state->ir4 < state->ir4_soft_threshold;
+  int ir1 = state->ir1;
+  int ir2 = state->ir2;
+  int ir3 = state->ir3;
+  int ir4 = state->ir4;
 
   LOGGER.println("ir1" + String(ir1) + "ir2" + String(ir2) + "ir3" + String(ir3) + "ir4" +String(ir4));
-
-  if (ir2 >= 600 && ir3 >= 600 && ir1 < 600 && ir4 < 600) {
+  
+  if (ir2 >= 600 && ir3 >= 600) {
     LOGGER.println("forward");
+    board->setOLEDLine(7, "Forward");
         // Car is on the track, move forward
-    board->setSpeedOnBothMotors(250);
+    board->setSpeedOnBothMotors(-200);
   } else if (ir2 < 600 && ir3 >= 600) {
       // Car is veering to the left, adjust to the right
       LOGGER.println("adjust right");
-      board->setMotorSpeedL(-250);
-      board->setMotorSpeedR(-220);
+      board->setOLEDLine(7, "adjust right" );
+      board->setMotorSpeedL(-220);
+      board->setMotorSpeedR(-190);
   } else if (ir2 >= 600 && ir3 < 600) {
       // Car is veering to the right, adjust to the left
        LOGGER.println("adjust left");
-      board->setMotorSpeedL(-220);
-      board->setMotorSpeedR(-250);
+       board->setOLEDLine(7, "adjust left");
+      board->setMotorSpeedL(-190);
+      board->setMotorSpeedR(-220);
   } else {
       // Car is off the track, stop or take corrective action
       LOGGER.println("STOP");
+      board->setOLEDLine(7, "stop");
       board->setSpeedOnBothMotors(0);
   }
 
