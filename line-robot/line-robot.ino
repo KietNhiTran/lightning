@@ -138,13 +138,42 @@ void drivingActions() {
   }
   
   // This example will drive forward for 2s, pause for half a second, then drive backward for 2s
-  board->setSpeedOnBothMotors(250);
-  delay(2000);
-  board->setSpeedOnBothMotors(0);
-  delay(500);
-  board->setSpeedOnBothMotors(-250);
-  delay(2000);
-  board->getRobotState()->setIdle();  
+  // board->setSpeedOnBothMotors(250);
+  // delay(2000);
+  // board->setSpeedOnBothMotors(0);
+  // delay(500);
+  // board->setSpeedOnBothMotors(-250);
+  // delay(2000);
+  // board->getRobotState()->setIdle();  
+  // read the state of ire
+
+  int ir1 = state->ir1 < state->ir1_soft_threshold;
+  int ir2 = state->ir2 < state->ir2_soft_threshold;
+  int ir3 = state->ir3 < state->ir3_soft_threshold;
+  int ir4 = state->ir4 < state->ir4_soft_threshold;
+
+  LOGGER.println("ir1" + String(ir1) + "ir2" + String(ir2) + "ir3" + String(ir3) + "ir4" +String(ir4));
+
+  if (ir2 >= 600 && ir3 >= 600 && ir1 < 600 && ir4 < 600) {
+    LOGGER.println("forward");
+        // Car is on the track, move forward
+    board->setSpeedOnBothMotors(250);
+  } else if (ir2 < 600 && ir3 >= 600) {
+      // Car is veering to the left, adjust to the right
+      LOGGER.println("adjust right");
+      board->setMotorSpeedL(-250);
+      board->setMotorSpeedR(-220);
+  } else if (ir2 >= 600 && ir3 < 600) {
+      // Car is veering to the right, adjust to the left
+       LOGGER.println("adjust left");
+      board->setMotorSpeedL(-220);
+      board->setMotorSpeedR(-250);
+  } else {
+      // Car is off the track, stop or take corrective action
+      LOGGER.println("STOP");
+      board->setSpeedOnBothMotors(0);
+  }
+
 }
 
 
